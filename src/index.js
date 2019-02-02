@@ -85,21 +85,27 @@ function Square(props) {
       const history = this.state.history;
       const current = history[this.state.stepNumber];
       const winner = calculateWinner(current.squares);
-
+      console.log('StepNumber ' + this.state.stepNumber);
       const moves = history.map((step, move) => {
+        console.log('Move ' + move);
         let row;
         let col;
         [col,row] = colRow(step.changedSquare);
         const rowColDesc = row === null ?
           '' :
           '(' + col + ', ' + row + ')';
-    
+        const fontWeight = (move  === this.state.stepNumber) ?
+          'bold' : 'normal';
+        console.log(fontWeight);
         const desc = move ?
           'Go to move #' + move + " on square " + rowColDesc :
           'Go to game start';
         return (
           <li key={move}>
-            <button onClick={() => this.jumpTo(move)}>{desc}</button>
+            <button 
+              style={{fontWeight: fontWeight}}
+               onClick={() => this.jumpTo(move)} 
+            >{desc}</button>
           </li>
         );
       });
