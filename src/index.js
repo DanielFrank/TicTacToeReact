@@ -13,31 +13,30 @@ function Square(props) {
   class Board extends React.Component {
     renderSquare(i) {
       return (
-        <Square
+        <Square key={i}
           value={this.props.squares[i]}
           onClick={() => this.props.onClick(i)}
         />
       );
     }
 
+    renderBoard() {
+      let board = [];
+      for (let rowNum = 0; rowNum < 3; rowNum++) {
+        let children = [];
+        for (let colNum = 0; colNum < 3; colNum++) {
+          let squareNum = rowNum*3 + colNum;
+          children.push(this.renderSquare(squareNum));
+        }
+        board.push(<div className="board-row" key={rowNum}>{children}</div>);
+      }
+      return board;
+    }
+
     render() {
       return (
         <div>
-          <div className="board-row">
-            {this.renderSquare(0)}
-            {this.renderSquare(1)}
-            {this.renderSquare(2)}
-          </div>
-          <div className="board-row">
-            {this.renderSquare(3)}
-            {this.renderSquare(4)}
-            {this.renderSquare(5)}
-          </div>
-          <div className="board-row">
-            {this.renderSquare(6)}
-            {this.renderSquare(7)}
-            {this.renderSquare(8)}
-          </div>
+          {this.renderBoard()}
         </div>
       );
     }
@@ -85,9 +84,7 @@ function Square(props) {
       const history = this.state.history;
       const current = history[this.state.stepNumber];
       const winner = calculateWinner(current.squares);
-      console.log('StepNumber ' + this.state.stepNumber);
       const moves = history.map((step, move) => {
-        console.log('Move ' + move);
         let row;
         let col;
         [col,row] = colRow(step.changedSquare);
@@ -96,7 +93,6 @@ function Square(props) {
           '(' + col + ', ' + row + ')';
         const fontWeight = (move  === this.state.stepNumber) ?
           'bold' : 'normal';
-        console.log(fontWeight);
         const desc = move ?
           'Go to move #' + move + " on square " + rowColDesc :
           'Go to game start';
